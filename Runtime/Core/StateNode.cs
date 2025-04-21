@@ -5,7 +5,7 @@ namespace FPS.StateGraph.Runtime.Core
     public abstract class StateNode : MonoBehaviour
     {
         [SerializeField, Min(0)] protected int _currentState;
-        public abstract void SetState(int stateId);
+        public abstract int State { set; get; }
         public abstract bool HasState(string stateName, out int stateIndex);
         protected abstract int StatesCount { get; }
 
@@ -14,7 +14,7 @@ namespace FPS.StateGraph.Runtime.Core
             if (StatesCount == 0)
                 _currentState = 0;
 
-            SetState(_currentState);
+            State = _currentState;
         }
     }
 }

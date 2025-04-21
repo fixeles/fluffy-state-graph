@@ -6,18 +6,22 @@ namespace FPS.StateGraph.Runtime.Core
     {
         [SerializeField] private StateNode[] _childNodes;
 
-        public override void SetState(int stateId)
+        public override int State
         {
-            if (_childNodes == null || _childNodes.Length == 0)
-                return;
-
-            var state = Mathf.Clamp(stateId, 0, _childNodes.Length);
-            _currentState = stateId;
-
-            foreach (var childNode in _childNodes)
+            get => _currentState;
+            set
             {
-                if (childNode != null)
-                    childNode.SetState(state);
+                if (_childNodes == null || _childNodes.Length == 0)
+                    return;
+
+                var state = Mathf.Clamp(value, 0, _childNodes.Length);
+                _currentState = value;
+
+                foreach (var childNode in _childNodes)
+                {
+                    if (childNode != null)
+                        childNode.State = state;
+                }
             }
         }
 
@@ -39,7 +43,7 @@ namespace FPS.StateGraph.Runtime.Core
         public void TrySetState(string stateName)
         {
             if (HasState(stateName, out var stateIndex))
-                SetState(stateIndex);
+                State = stateIndex;
             else
                 Debug.LogError($"State {stateName} not found");
         }

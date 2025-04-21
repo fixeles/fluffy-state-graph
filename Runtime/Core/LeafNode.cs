@@ -9,14 +9,18 @@ namespace FPS.StateGraph.Runtime.Core
         [SerializeField] private TTarget _target;
         [SerializeField] private TConfig[] _states;
 
-        public override void SetState(int stateId)
+        public override int State
         {
-            if (_states == null || _states.Length == 0)
-                return;
+            get => _currentState;
+            set
+            {
+                if (_states == null || _states.Length == 0)
+                    return;
 
-            stateId = Mathf.Clamp(stateId, 0, _states.Length - 1);
-            _currentState = stateId;
-            _states[stateId].Apply(_target);
+                value = Mathf.Clamp(value, 0, _states.Length - 1);
+                _currentState = value;
+                _states[value].Apply(_target);
+            }
         }
 
         public override bool HasState(string stateName, out int stateIndex)
